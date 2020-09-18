@@ -1,132 +1,139 @@
 package com.small.small.utils;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.ArchiveInputStream;
-import org.apache.commons.compress.archivers.ArchiveOutputStream;
+import org.apache.commons.compress.archivers.zip.Zip64Mode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import java.io.*;
-import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Objects;
+
 
 /**
- * description:
- * <p>
- * Create By wesson 2020-09-16 23:59
- **/
+ * 文件压缩工具
+ * @author wesson
+ */
+@Slf4j
 public class ZipUtil {
     /**
-     * 压缩文件夹到指定zip文件
+     * 将文件打包成 zip 压缩包文件
      *
-     * @param srcDir 源文件夹
-     * @param targetFile 目标知道zip文件
-     * @throws IOException IO异常，抛出给调用者处理
+     * @param sourceFiles        待压缩的多个文件列表。只支持文件，不能有目录,否则抛异常。
+     * @param zipFile            压缩文件。文件可以不存在，但是目录必须存在，否则抛异常。如 C:\Users\Think\Desktop\aa.zip
+     * @param isDeleteSourceFile 是否删除源文件(sourceFiles)
+     * @return 是否压缩成功
      */
-    public static void zip(String srcDir, String targetFile) throws IOException {
-
-        try (
-                OutputStream outputStream = new FileOutputStream(targetFile);
-        ) {
-            zip(srcDir, outputStream);
+    public static boolean archiveFiles2Zip(File[] sourceFiles, File zipFile, boolean isDeleteSourceFile) {
+        //源文件输入流
+        InputStream inputStream = null;
+        //压缩文件输出流
+        ZipArchiveOutputStream zipArchiveOutputStream = null;
+        if (sourceFiles == null || sourceFiles.length <= 0) {
+            return false;
         }
-    }
-
-    /**
-     * 压缩文件夹到指定输出流中，可以是本地文件输出流，也可以是web响应下载流
-     *
-     * @param srcDir 源文件夹
-     * @param outputStream 压缩后文件的输出流
-     * @throws IOException IO异常，抛出给调用者处理
-     */
-    public static void zip(String srcDir, OutputStream outputStream) throws IOException {
-        try (
-                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-                ArchiveOutputStream out = new ZipArchiveOutputStream(bufferedOutputStream);
-        ) {
-            Path start = Paths.get(srcDir);
-            Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
-
-                @Override
-                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                    ArchiveEntry entry = new ZipArchiveEntry(dir.toFile(), start.relativize(dir).toString());
-                    out.putArchiveEntry(entry);
-                    out.closeArchiveEntry();
-                    return super.preVisitDirectory(dir, attrs);
-                }
-
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    try (
-                            InputStream input = new FileInputStream(file.toFile())
-                    ) {
-                        ArchiveEntry entry = new ZipArchiveEntry(file.toFile(), start.relativize(file).toString());
-                        out.putArchiveEntry(entry);
-                        IOUtils.copy(input, out);
-                        out.closeArchiveEntry();
-                    }
-                    return super.visitFile(file, attrs);
-                }
-
-            });
-
-        }
-    }
-
-    /**
-     * 解压zip文件到指定文件夹
-     *
-     * @param zipFileName 源zip文件路径
-     * @param destDir 解压后输出路径
-     * @throws IOException IO异常，抛出给调用者处理
-     */
-    public static void unzip(String zipFileName, String destDir) throws IOException {
-        try (
-                InputStream inputStream = new FileInputStream(zipFileName);
-        ) {
-            unzip(inputStream, destDir);
-        }
-
-    }
-
-    /**
-     * 从输入流中获取zip文件，并解压到指定文件夹
-     *
-     * @param inputStream zip文件输入流，可以是本地文件输入流，也可以是web请求上传流
-     * @param destDir 解压后输出路径
-     * @throws IOException IO异常，抛出给调用者处理
-     */
-    public static void unzip(InputStream inputStream, String destDir) throws IOException {
-        try (
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-                ArchiveInputStream in = new ZipArchiveInputStream(bufferedInputStream);
-        ) {
-            ArchiveEntry entry = null;
-            while (Objects.nonNull(entry = in.getNextEntry())) {
-                if (in.canReadEntryData(entry)) {
-                    File file = Paths.get(destDir, entry.getName()).toFile();
-                    if (entry.isDirectory()) {
-                        if (!file.exists()) {
-                            file.mkdirs();
-                        }
-                    } else {
-                        try (
-                                OutputStream out = new FileOutputStream(file);
-                        ) {
-                            IOUtils.copy(in, out);
-                        }
-                    }
-                } else {
-                    System.out.println(entry.getName());
+        try {
+            //ZipArchiveOutputStream(File file) ：根据文件构建压缩输出流，将源文件压缩到此文件.
+            zipArchiveOutputStream = new ZipArchiveOutputStream(zipFile);
+            //setUseZip64(final Zip64Mode mode)：是否使用 Zip64 扩展。
+            // Zip64Mode 枚举有 3 个值：Always：对所有条目使用 Zip64 扩展、Never：不对任何条目使用Zip64扩展、AsNeeded：对需要的所有条目使用Zip64扩展
+            zipArchiveOutputStream.setUseZip64(Zip64Mode.AsNeeded);
+            for (File file : sourceFiles) {
+                //将每个源文件用 ZipArchiveEntry 实体封装，然后添加到压缩文件中. 这样将来解压后里面的文件名称还是保持一致.
+                ZipArchiveEntry zipArchiveEntry = new ZipArchiveEntry(file.getName());
+                zipArchiveOutputStream.putArchiveEntry(zipArchiveEntry);
+                //获取源文件输入流
+                inputStream = new FileInputStream(file);
+                byte[] buffer = new byte[1024 * 5];
+                //每次读取的字节大小。
+                int length = -1;
+                while ((length = inputStream.read(buffer)) != -1) {
+                    //把缓冲区的字节写入到 ZipArchiveEntry
+                    zipArchiveOutputStream.write(buffer, 0, length);
                 }
             }
+            //写入此条目的所有必要数据。如果条目未压缩或压缩后的大小超过4 GB 则抛出异常
+            zipArchiveOutputStream.closeArchiveEntry();
+            //压缩结束.
+            zipArchiveOutputStream.finish();
+            if (isDeleteSourceFile) {
+                //为 true 则删除源文件.
+                for (File file : sourceFiles) {
+                    file.deleteOnExit();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            //关闭输入、输出流，释放资源.
+            try {
+                if (null != inputStream) {
+                    inputStream.close();
+                }
+                if (null != zipArchiveOutputStream) {
+                    zipArchiveOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
+        return true;
     }
 
-
+    /**
+     * 将 zip 压缩包解压成文件到指定文件夹下
+     *
+     * @param zipFile   待解压的压缩文件。亲测  .zip 文件有效；.7z 压缩解压时抛异常。
+     * @param targetDir 解压后文件存放的目的地. 此目录必须存在，否则异常。
+     * @return 是否成功
+     */
+    public static boolean decompressZip2Files(File zipFile, File targetDir) {
+        //源文件输入流，用于构建 ZipArchiveInputStream
+        InputStream inputStream = null;
+        //解压缩的文件输出流
+        OutputStream outputStream = null;
+        //zip 文件输入流
+        ZipArchiveInputStream zipArchiveInputStream = null;
+        //压缩文件实体.
+        ArchiveEntry archiveEntry = null;
+        try {
+            //创建输入流，然后转压缩文件输入流
+            inputStream = new FileInputStream(zipFile);
+            zipArchiveInputStream = new ZipArchiveInputStream(inputStream, "UTF-8");
+            //遍历解压每一个文件.
+            while (null != (archiveEntry = zipArchiveInputStream.getNextEntry())) {
+                //获取文件名
+                String archiveEntryFileName = archiveEntry.getName();
+                //把解压出来的文件写到指定路径
+                File entryFile = new File(targetDir, archiveEntryFileName);
+                byte[] buffer = new byte[1024 * 5];
+                outputStream = new FileOutputStream(entryFile);
+                int length = -1;
+                while ((length = zipArchiveInputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, length);
+                }
+                outputStream.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (null != outputStream) {
+                    outputStream.close();
+                }
+                if (null != zipArchiveInputStream) {
+                    zipArchiveInputStream.close();
+                }
+                if (null != inputStream) {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
 }
