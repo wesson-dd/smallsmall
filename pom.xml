@@ -60,7 +60,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.20</version>
+            <version>5.1.46</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -68,9 +68,24 @@
             <version>1.18</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-commons-csv</artifactId>
+            <version>1.4.1</version>
         </dependency>
     </dependencies>
 
@@ -103,7 +118,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.3.0.RELEASE</version>
                 <configuration>
-                    <mainClass>com.small.small.SmallsmallApplication</mainClass>
+                    <mainClass>com.small.small.SmallApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
