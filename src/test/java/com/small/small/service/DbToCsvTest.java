@@ -22,7 +22,7 @@ public class DbToCsvTest {
     DbToCsvService dbToCsvService;
     @Test
     public void csvTest() throws IOException {
-        File file = new File("./doc/csv.csv");
+        File file = new File("./doc/csv2.csv");
         if(!file.exists()){
             file.getParentFile().mkdirs();
         }
@@ -34,6 +34,6 @@ public class DbToCsvTest {
         list.add("json");
         list.add("decimal");
 
-        dbToCsvService.autoReadDbToScv(file,"person",list);
+        dbToCsvService.autoReadDbToScv(file,"person",list,"2");
     }
 }

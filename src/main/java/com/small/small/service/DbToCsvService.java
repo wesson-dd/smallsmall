@@ -12,6 +12,7 @@ import org.apache.commons.csv.CSVFormat;
 import java.io.*;
 import java.lang.invoke.MethodHandles;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,8 +39,8 @@ public class DbToCsvService {
      * @param columnsName 字段名
      * @throws IOException 异常
      */
-    public void autoReadDbToScv(File result, String tableName, List<String> columnsName) throws IOException {
-        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(result),Charset.forName("GBK"));
+    public void autoReadDbToScv(File result, String tableName, List<String> columnsName,String schemeId) throws IOException {
+        OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(result), StandardCharsets.UTF_8);
         CSVPrinter printer = new CSVPrinter(fileWriter, CSVFormat.DEFAULT.withRecordSeparator("\n"));
         // 写表头
         printer.printRecord(columnsName);
@@ -51,8 +52,8 @@ public class DbToCsvService {
         // 读数据库，转储到csv
         int total = dynamicMapper.getTotalCountByParam(dynamicMapperParams);
         List<LinkedHashMap<String, Object>> tmpList;
-        for (int i = 0; i < total; i += 1000) {
-            dynamicMapperParams.setSqlCondition("limit " + i + ",1000");
+        for (int i = 0; i < total; i += 3000) {
+            dynamicMapperParams.setSqlCondition("where id = "+schemeId+" limit " + i + ",3000");
             tmpList = dynamicMapper.getResultListByParams(dynamicMapperParams);
             List<Collection<Object>> rows = tmpList.stream()
                     .map(LinkedHashMap::values)
