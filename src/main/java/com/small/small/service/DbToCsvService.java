@@ -1,7 +1,11 @@
 package com.small.small.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.small.small.dao.DynamicMapper;
 import com.small.small.pojo.DynamicMapperParams;
+import com.small.small.utils.CheckUtil;
 import org.apache.commons.csv.CSVPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +15,6 @@ import org.apache.commons.csv.CSVFormat;
 
 import java.io.*;
 import java.lang.invoke.MethodHandles;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -34,26 +37,29 @@ public class DbToCsvService {
 
     /**
      * 读取动态表配置，生成CSV文件
+     *
      * @param result      文件放置路径
      * @param tableName   数据库表名
      * @param columnsName 字段名
      * @throws IOException 异常
      */
-    public void autoReadDbToScv(File result, String tableName, List<String> columnsName,String schemeId) throws IOException {
+    public void autoReadDbToScv(File result, String tableName, List<String> columnsName, String id) throws IOException {
         OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(result), StandardCharsets.UTF_8);
         CSVPrinter printer = new CSVPrinter(fileWriter, CSVFormat.DEFAULT.withRecordSeparator("\n"));
-        // 写表头
+        logger.info("写表头------");
         printer.printRecord(columnsName);
-        // 写数据
+        logger.info("写数据------");
         DynamicMapperParams dynamicMapperParams = new DynamicMapperParams();
         dynamicMapperParams.setTableName(tableName);
         dynamicMapperParams.setColumns(columnsName);
         dynamicMapperParams.setSqlCondition("");
-        // 读数据库，转储到csv
+        logger.info("读数据库，转储到csv");
         int total = dynamicMapper.getTotalCountByParam(dynamicMapperParams);
         List<LinkedHashMap<String, Object>> tmpList;
-        for (int i = 0; i < total; i += 3000) {
-            dynamicMapperParams.setSqlCondition("where id = "+schemeId+" limit " + i + ",3000");
+        int num = 3000;
+        for (int i = 0; i < total; i += num) {
+            // dynamicMapperParams.setSqlCondition("where id = " + id + " limit " + i + "," + num);
+            dynamicMapperParams.setSqlCondition("limit " + i + "," + num);
             tmpList = dynamicMapper.getResultListByParams(dynamicMapperParams);
             List<Collection<Object>> rows = tmpList.stream()
                     .map(LinkedHashMap::values)
