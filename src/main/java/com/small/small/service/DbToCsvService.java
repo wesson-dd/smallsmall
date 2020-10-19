@@ -1,11 +1,7 @@
 package com.small.small.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.small.small.dao.DynamicMapper;
 import com.small.small.pojo.DynamicMapperParams;
-import com.small.small.utils.CheckUtil;
 import org.apache.commons.csv.CSVPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +54,6 @@ public class DbToCsvService {
         List<LinkedHashMap<String, Object>> tmpList;
         int num = 3000;
         for (int i = 0; i < total; i += num) {
-            // dynamicMapperParams.setSqlCondition("where id = " + id + " limit " + i + "," + num);
             dynamicMapperParams.setSqlCondition("limit " + i + "," + num);
             tmpList = dynamicMapper.getResultListByParams(dynamicMapperParams);
             List<Collection<Object>> rows = tmpList.stream()
