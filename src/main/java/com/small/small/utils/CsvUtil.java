@@ -22,13 +22,13 @@ import java.util.List;
 public class CsvUtil {
     public static void main(String args[]) {
         CsvUtil csv1 = new CsvUtil();
-        csv1.read("./doc/com1.csv");
+        csv1.readAndChange("./doc/com1.csv");
     }
 
     /**
-     * 读取文件信息,存入ArrayList集合
+     * 读取文件信息,换表头写入
      */
-    public void read(String filePath) {
+    public void readAndChange(String filePath) {
         List<Object> list;
         try {
             list =new ArrayList<>();
