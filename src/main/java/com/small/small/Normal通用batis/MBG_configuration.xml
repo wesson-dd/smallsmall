@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="MySQLTables" targetRuntime="MyBatis3">
+        <!--   TODO 路径-->
+        <plugin type="com.small.small.Normal通用batis.MySQLGeneratorPrimaryKeyPlugin"/>
+        <plugin type="com.small.small.Normal通用batis.EntitySerializablePlugin"/>
+        <commentGenerator type="com.small.small.Normal通用batis.MyCommentGenerator">
+        </commentGenerator>
+        <!--TODO  生发环境数据库配置:修改配置 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://10.206.22.3:3306/db_prior?useSSL=false"
+                        userId="root" password="root">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <!-- TODO  targetProject请使用绝对路径-->
+        <javaModelGenerator targetPackage="com.sftc.isc.psolution.pojo.base" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!-- TODO mapper-->
+        <sqlMapGenerator targetPackage="base" targetProject="src/main/resources/mapper">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!-- TODO dao-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.sftc.isc.psolution.dao.base"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="t_scheme_up_files"
+               domainObjectName="SchemeUpFiles"
+               enableCountByExample="true"
+               enableUpdateByExample="true" enableDeleteByExample="true"
+               enableSelectByExample="true" selectByExampleQueryId="true"
+               enableInsert="true" enableUpdateByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true">
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+
+    </context>
+</generatorConfiguration>
