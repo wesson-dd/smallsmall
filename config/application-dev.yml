@@ -1,7 +1,8 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8333
 # 应用名称
 spring:
-  profiles:
-    active: dev
   application:
     name: small
   main:
@@ -19,5 +20,9 @@ mybatis:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.small.small.dao
 
-
+#日志
+logging:
+  level:
+    root: info
+  config: ./config/logback-spring.xml
 

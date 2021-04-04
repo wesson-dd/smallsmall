@@ -1,7 +1,8 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8666
 # 应用名称
 spring:
-  profiles:
-    active: dev
   application:
     name: small
   main:
@@ -18,6 +19,4 @@ spring:
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.small.small.dao
-
-
 
