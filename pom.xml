@@ -36,22 +36,6 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.junit.vintage</groupId>
-                    <artifactId>junit-vintage-engine</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>1.26</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
             <version>1.18</version>
@@ -165,12 +149,6 @@
             <id>prod</id>
             <properties>
                 <activatedProperties>prod</activatedProperties>
-            </properties>
-        </profile>
-        <profile>
-            <id>sit</id>
-            <properties>
-                <activatedProperties>sit</activatedProperties>
             </properties>
         </profile>
     </profiles>
