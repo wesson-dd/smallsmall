@@ -5,9 +5,9 @@
 <generatorConfiguration>
     <context id="MySQLTables" targetRuntime="MyBatis3">
         <!--   TODO 路径-->
-        <plugin type="com.small.small.Normal通用batis.MySQLGeneratorPrimaryKeyPlugin"/>
-        <plugin type="com.small.small.Normal通用batis.EntitySerializablePlugin"/>
-        <commentGenerator type="com.small.small.Normal通用batis.MyCommentGenerator">
+        <plugin type="com.small.small.ibatis.MySQLGeneratorPrimaryKeyPlugin"/>
+        <plugin type="com.small.small.ibatis.EntitySerializablePlugin"/>
+        <commentGenerator type="com.small.small.ibatis.MyCommentGenerator">
         </commentGenerator>
         <!--TODO  生发环境数据库配置:修改配置 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"

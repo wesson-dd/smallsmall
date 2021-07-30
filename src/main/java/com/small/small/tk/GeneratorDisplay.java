@@ -1,4 +1,4 @@
-package com.small.small.TkMybatis通用类;
+package com.small.small.tk;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
