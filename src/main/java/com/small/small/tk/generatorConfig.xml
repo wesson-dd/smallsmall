@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="MysqlContext" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <!--TODO 要修改主Mapper的位置-->
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="com.sftc.isc.psolution.utils.MyMapper"/>
+        </plugin>
+
+        <!--TODO 连接的数据库-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://10.188.40.2:5728/sf01395518_psolution?useSSL=false"
+                        userId="sf01395518" password="1q2w3e@sf">
+        </jdbcConnection>
+
+        <!--TODO  设置生成的pojo所在包 -->
+        <javaModelGenerator targetPackage="com.sftc.isc.psolution.pojo" targetProject="src/main/java"/>
+
+        <!--TODO  设置生成的mapper所在目录 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources"/>
+
+        <!--TODO  设置配置mapper对应的java映射 -->
+        <javaClientGenerator targetPackage="com.sftc.isc.psolution.dao" targetProject="src/main/java"
+                             type="XMLMAPPER"/>
+
+        <!--TODO 指定要生成的单个表名   domainObjectName>生成的名字-->
+        <table tableName="sku_"
+               domainObjectName="sku2">
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+
+
+        <!-- sql占位符，表示所有的表 -->
+        <!--    <table tableName="%">
+              <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+          </table>
+    -->
+    </context>
+</generatorConfiguration>
