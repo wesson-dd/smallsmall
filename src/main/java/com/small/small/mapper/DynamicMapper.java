@@ -1,4 +1,4 @@
-package com.small.small.dao;
+package com.small.small.mapper;
 
 import com.small.small.pojo.DynamicMapperParams;
 import org.apache.ibatis.annotations.Mapper;
