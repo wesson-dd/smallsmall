@@ -1,4 +1,4 @@
-package com.small.small.tk;
+package com.small.small.utils.other.tk;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;

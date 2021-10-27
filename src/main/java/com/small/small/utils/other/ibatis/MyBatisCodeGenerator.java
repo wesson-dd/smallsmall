@@ -1,4 +1,4 @@
-package com.small.small.ibatis;
+package com.small.small.utils.other.ibatis;
 
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;

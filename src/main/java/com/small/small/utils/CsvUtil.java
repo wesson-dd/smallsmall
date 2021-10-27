@@ -20,7 +20,7 @@ import java.util.List;
  **/
 
 public class CsvUtil {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         CsvUtil csv1 = new CsvUtil();
         csv1.readAndChange("./doc/com1.csv");
     }
@@ -31,7 +31,7 @@ public class CsvUtil {
     public void readAndChange(String filePath) {
         List<Object> list;
         try {
-            list =new ArrayList<>();
+            list = new ArrayList<>();
             // 创建CSV读对象,设置字符集为GBK
             CsvReader csvReader = new CsvReader(filePath, ',', Charset.forName("GBK"));
             // 读表头,返回的是布尔值
