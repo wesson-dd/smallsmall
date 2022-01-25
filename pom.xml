@@ -135,7 +135,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.3.0.RELEASE</version>
                 <configuration>
-                    <mainClass>com.small.small.SmallApplication</mainClass>
+                    <mainClass>com.small.SmallApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

@@ -20,7 +20,7 @@ spring:
 #mybatis
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
-  type-aliases-package: com.small.small.mapper
+  type-aliases-package: com.small.mapper
 
 
 
