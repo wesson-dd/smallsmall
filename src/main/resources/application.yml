@@ -1,7 +1,5 @@
 # 应用名称
 spring:
-  profiles:
-    active: dev
   application:
     name: small
   main:
@@ -16,9 +14,11 @@ spring:
     url: jdbc:mysql://localhost:3306/small?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8&useSSL=false
     username: root
     password: root
+    dynamic:
+      lazy: true
 
 #mybatis
-mybatis:
+mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.small.small.mapper
 

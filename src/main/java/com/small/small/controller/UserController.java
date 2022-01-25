@@ -1,9 +1,12 @@
 package com.small.small.controller;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
 import com.small.small.wesson.Mytest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 
 /**
  * description:
@@ -16,6 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     @GetMapping("/a")
     public String test() {
-        return Mytest.method1();
+        return LocalDateTimeUtil.now().toString();
     }
 }
