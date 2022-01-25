@@ -10,10 +10,10 @@ import java.util.List;
 
 
 /**
- * description:
- * <p>
  * Create By wesson 2020-09-20 20:42
- **/
+ *
+ * @author wesson
+ */
 @Mapper
 @Repository
 public interface DynamicMapper {
