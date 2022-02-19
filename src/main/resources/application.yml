@@ -11,7 +11,7 @@ spring:
   #数据库
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/small?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT%2B8&useSSL=false
+    url: jdbc:mysql://localhost:3306/small?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&useSSL=false
     username: root
     password: root
     dynamic:
@@ -20,7 +20,7 @@ spring:
 #mybatis
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
-  type-aliases-package: com.small.mapper
+  type-aliases-package: com.small.pojo
 
 
 
