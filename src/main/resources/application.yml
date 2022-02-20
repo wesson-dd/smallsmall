@@ -10,17 +10,36 @@ spring:
 
   #数据库
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/small?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&useSSL=false
-    username: root
-    password: root
     dynamic:
       lazy: true
+      primary: master
+      strict: false
+      datasource:
+        master:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/small?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&autoReconnect=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&useSSL=false
+          username: root
+          password: root
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 100
+      auto-commit: true
+      pool-name: hikariPool
+      connection-timeout: 50000
+      connection-init-sql: SELECT 1
+      idle-timeout: 30000
+      validation-timeout: 3000
+
 
 #mybatis
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.small.pojo
+
+wesson:
+  to: to
+  be: be
+  top: top
 
 
 
