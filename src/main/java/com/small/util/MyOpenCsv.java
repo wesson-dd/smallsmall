@@ -1,4 +1,4 @@
-package com.small.service;
+package com.small.util;
 
 import com.google.common.collect.Lists;
 import com.opencsv.*;
@@ -16,10 +16,6 @@ import java.util.Set;
  */
 @Slf4j
 public class MyOpenCsv {
-    public static void main(String[] args) {
-        List<String[]> strings = MyOpenCsv.readCsv("/Users/wesson/Desktop/output/dmd.csv", 1);
-        MyOpenCsv.writeCsv("/Users/wesson/Desktop/output/dmd2.csv", strings);
-    }
 
     /**
      * @param filePath 文件路径
