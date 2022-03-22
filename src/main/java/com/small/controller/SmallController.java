@@ -1,7 +1,10 @@
 package com.small.controller;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
+import com.small.service.SmallService;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * @author wesson
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/small")
 public class SmallController {
+    @Resource
+    private SmallService smallService;
 
     @GetMapping("/get")
     public String get() {
