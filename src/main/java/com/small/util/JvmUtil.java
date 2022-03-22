@@ -73,7 +73,7 @@ public class JvmUtil {
 
         LockInfo[] locks = threadInfo.getLockedSynchronizers();
         if (locks.length > 0) {
-            sb.append("\n\tNumber of locked synchronizers = ").append(locks.length);
+            sb.append("\n\tNumber of locked synchronizes = ").append(locks.length);
             sb.append('\n');
             for (LockInfo li : locks) {
                 sb.append("\t- ").append(li);

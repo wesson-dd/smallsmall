@@ -12,7 +12,7 @@ import java.util.List;
  * Create at 2022/2/20 19:55 周日
  */
 @Service
-public class TestService {
+public class SmallService {
     @Value("${wesson.to}")
     private String to;
     @Value("${wesson.be}")
