@@ -41,5 +41,28 @@ wesson:
   be: be
   top: top
 
+# retrofit
+retrofit:
+  log:
+    enable: true
+    logging-interceptor: com.github.lianjiatech.retrofit.spring.boot.interceptor.DefaultLoggingInterceptor
+    global-log-level: info
+    global-log-strategy: body
+  global-connect-timeout-ms: 3000
+  global-read-timeout-ms: 10000
+  global-write-timeout-ms: 10000
+  global-call-timeout-ms: 0
+  retry:
+    enable-global-retry: true
+    global-max-retries: 2
+    global-retry-rules:
+      - response_status_not_2xx
+      - occur_exception
+    retry-interceptor: com.github.lianjiatech.retrofit.spring.boot.retry.DefaultRetryInterceptor
+
+
+# 外部接口地址
+remote:
+  base-url: http://127.0.0.1:8080
 
 

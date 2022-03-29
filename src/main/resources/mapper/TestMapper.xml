@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.small.mapper.TestMapper">
+
+    <select id="getTestInfo" resultType="com.small.pojo.Test">
+        select *
+        from test
+        where id &lt;&gt; 9
+    </select>
+
+</mapper>
