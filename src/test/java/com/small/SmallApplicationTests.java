@@ -1,18 +1,31 @@
 package com.small;
 
+import com.small.interfaces.RetrofitClient1;
 import com.small.service.SmallService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @SpringBootTest
 class SmallApplicationTests {
     @Autowired
-    SmallService smallService;
+    private SmallService smallService;
+    @Autowired
+    private RetrofitClient1 retrofitClient1;
 
     @Test
     void contextLoads() {
-        System.out.println(smallService.getList());
+        Assertions.assertNotNull(smallService.getList());
+
     }
 
+    @Test
+    void retrofitTest1() {
+
+        List<com.small.pojo.Test> retrofitGet = retrofitClient1.retrofitGet();
+        Assertions.assertNotNull(retrofitGet);
+    }
 }

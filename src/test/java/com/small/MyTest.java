@@ -47,5 +47,7 @@ class MyTest {
     void testOpenCsv() {
         List<String[]> strings = MyOpenCsv.readCsv("/Users/wesson/Desktop/output/dmd.csv", 1);
         MyOpenCsv.writeCsv("/Users/wesson/Desktop/output/dmd2.csv", strings);
+
+        Assertions.assertTrue(new File("/Users/wesson/Desktop/output/dmd2.csv").exists());
     }
 }
