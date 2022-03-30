@@ -20,9 +20,8 @@ import java.util.List;
 public class DynamicMapperParams implements Serializable {
     private static final long serialVersionUID = -2029047708406518991L;
 
-    private List<String> columns;
     private String tableName;
-    private String updateStatement;
+    private List<String> columns;
     private String sqlCondition;
 
 
