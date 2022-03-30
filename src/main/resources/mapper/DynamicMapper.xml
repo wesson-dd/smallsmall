@@ -6,14 +6,15 @@
             parameterType="com.small.pojo.DynamicMapperParams">
         select
         <foreach collection="params.columns" item="column" separator=",">
-            `${column}`
+            ${column}
         </foreach>
-        from `${params.tableName}`
-        ${params.sqlCondition}
+        from ${params.tableName}
+        where ${params.sqlCondition}
     </select>
     <select id="getTotalCountByParam" resultType="java.lang.Integer"
             parameterType="com.small.pojo.DynamicMapperParams">
         select count(1)
-        from `${params.tableName}` `${params.sqlCondition}`
+        from ${params.tableName}
+        where ${params.sqlCondition}
     </select>
 </mapper>

@@ -3,14 +3,8 @@
     <!--日志存储路径-->
     <property name="LOG_HOME" value="./log"/>
 
-    <property name="COLOR_LOG_PATTERN" value="%d{ISO8601}|%clr(%p)|%t|%c|%L|%clr(%X{traceId})|%m%ex%n"/>
+    <property name="COLOR_LOG_PATTERN" value="%d{ISO8601}|%highlight(%p)|%t|%c|%L|%highlight(%X{traceId})|%m%ex%n"/>
     <property name="NORMAL_LOG_PATTERN" value="%d{ISO8601}|%p|%t|%c|%L|%X{traceId}|%m%ex%n"/>
-    <!-- 彩色日志依赖的渲染类 -->
-    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
-    <conversionRule conversionWord="wex"
-                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
-    <conversionRule conversionWord="wEx"
-                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
 
     <!--输出到控制台 ConsoleAppender-->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
