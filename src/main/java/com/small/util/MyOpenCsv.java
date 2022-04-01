@@ -16,6 +16,8 @@ import java.util.Set;
  */
 @Slf4j
 public class MyOpenCsv {
+    private MyOpenCsv() {
+    }
 
     /**
      * @param filePath 文件路径
@@ -23,10 +25,12 @@ public class MyOpenCsv {
      */
     @SneakyThrows
     public static List<String> readCsvHead(String filePath) {
-        Set<String> set = new CSVReaderHeaderAware(new FileReader(filePath)).readMap().keySet();
-        List<String> list = Lists.newArrayList(set);
-        log.info("[{}] 文件头={}", filePath, list);
-        return list;
+        try (CSVReaderHeaderAware csvReaderHeaderAware = new CSVReaderHeaderAware(new FileReader(filePath))) {
+            Set<String> set = csvReaderHeaderAware.readMap().keySet();
+            List<String> list = Lists.newArrayList(set);
+            log.info("[{}] 文件头={}", filePath, list);
+            return list;
+        }
     }
 
     /**
@@ -43,16 +47,7 @@ public class MyOpenCsv {
                 .withCSVParser(rfc4180Parser)
                 .withSkipLines(skipLines)
                 .build()) {
-            //String[] nextLine;
-            //List<String[]> list = Lists.newArrayList();
-            //while ((nextLine = csvReader.readNext()) != null) {
-            //    List<String> arrayList = Lists.newArrayList(nextLine);
-            //    for (int i : numList) {
-            //        arrayList.remove(i);
-            //    }
-            //    nextLine = arrayList.toArray(new String[0]);
-            //    list.add(nextLine);
-            //}
+
             return csvReader.readAll();
         }
     }
