@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds" debug="false">
-    <!--日志存储路径-->
-    <property name="LOG_HOME" value="./log"/>
-
+    <springProfile name="dev">
+        <property name="LOG_HOME" value="./log"/>
+    </springProfile>
+    <springProfile name="prod">
+        <property name="LOG_HOME" value="../log"/>
+    </springProfile>
     <property name="COLOR_LOG_PATTERN" value="%d{ISO8601}|%highlight(%p)|%t|%c|%L|%highlight(%X{traceId})|%m%ex%n"/>
     <property name="NORMAL_LOG_PATTERN" value="%d{ISO8601}|%p|%t|%c|%L|%X{traceId}|%m%ex%n"/>
 
@@ -70,12 +73,19 @@
         <appender-ref ref="BIZ-APPENDER"/>
     </appender>
 
-    <!-- 日志输出级别 -->
-    <root level="info">
-        <!-- 生产环境必需关闭 CONSOLE -->
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="ERROR-ASYNC-APPENDER"/>
-        <appender-ref ref="BIZ-ASYNC-APPENDER"/>
-    </root>
+    <springProfile name="prod">
+        <root level="info">
+            <appender-ref ref="ERROR-ASYNC-APPENDER"/>
+            <appender-ref ref="BIZ-ASYNC-APPENDER"/>
+        </root>
+    </springProfile>
+    <springProfile name="dev">
+        <root level="info">
+            <!-- 生产环境必需关闭 CONSOLE -->
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="ERROR-ASYNC-APPENDER"/>
+            <appender-ref ref="BIZ-ASYNC-APPENDER"/>
+        </root>
+    </springProfile>
 
 </configuration>
