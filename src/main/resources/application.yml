@@ -31,6 +31,8 @@ spring:
       connection-init-sql: SELECT 1
       idle-timeout: 30000
       validation-timeout: 3000
+  profiles:
+    active: dev
 
 
 #mybatis
