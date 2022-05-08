@@ -1,8 +1,8 @@
 package com.small.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import com.sun.management.OperatingSystemMXBean;
 import lombok.extern.slf4j.Slf4j;
 
@@ -179,7 +179,7 @@ public class JvmInfo {
         }
         jsonObject.put("rxPercent", rxPercent);
         jsonObject.put("txPercent", txPercent);
-        return JSON.toJSONStringWithDateFormat(jsonObject, "yyyy-MM-dd HH:mm:ss", SerializerFeature.WriteMapNullValue);
+        return JSON.toJSONString(jsonObject, "yyyy-MM-dd HH:mm:ss", JSONWriter.Feature.WriteNulls);
     }
 
     /**
@@ -215,7 +215,7 @@ public class JvmInfo {
         }
         jsonObject.put("rxPercent", rxPercent);
         jsonObject.put("txPercent", txPercent);
-        return JSON.toJSONStringWithDateFormat(jsonObject, "yyyy-MM-dd HH:mm:ss", SerializerFeature.WriteMapNullValue);
+        return JSON.toJSONString(jsonObject, "yyyy-MM-dd HH:mm:ss", JSONWriter.Feature.NullAsDefaultValue);
     }
 
     /**
