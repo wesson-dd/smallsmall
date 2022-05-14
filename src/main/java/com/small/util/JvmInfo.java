@@ -1,5 +1,6 @@
 package com.small.util;
 
+import cn.hutool.core.thread.ThreadUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
@@ -11,10 +12,9 @@ import javax.annotation.PreDestroy;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
-import java.util.Formatter;
-import java.util.StringTokenizer;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * @author wesson
@@ -33,11 +33,13 @@ public class JvmInfo {
      */
     private static final int SLEEP_TIME = 1000 * 60 * 9;
     private static final int PERCENT = 100;
-    private static final int FAULTLENGTH = 10;
+    private static final int FAULT_LENGTH = 10;
+    public static final String WINDOWS = "windows";
+    public static final String LINUX = "linux";
     private final String isWindowsOrLinux = isWindowsOrLinux();
     private String pid = "";
 
-    private Timer sysInfoGetTimer = new Timer("sysInfoGet");
+    private final Timer sysInfoGetTimer = new Timer("sysInfoGet");
 
 
     /**
@@ -45,39 +47,34 @@ public class JvmInfo {
      */
     @PostConstruct
     public void init() {
-        if ("windows".equals(isWindowsOrLinux)) {
+        if (WINDOWS.equals(isWindowsOrLinux)) {
             getJvmPIDOnWindows();
         } else {
             getJvmPIDOnLinux();
         }
-        sysInfoGetTimer.schedule(new SysInfoAcquirerTimerTask(), 10 * 1000, PERIOD_TIME);
+        sysInfoGetTimer.schedule(new SysInfoAcquirerTimerTask(), 10 * 1000L, PERIOD_TIME);
     }
 
     /**
      * 判断是服务器的系统类型是Windows 还是 Linux
      */
     public String isWindowsOrLinux() {
-        String osName = System.getProperty("os.name");
-        String sysName = "";
-        if (osName.toLowerCase().startsWith("windows")) {
-            sysName = "windows";
-        } else if (osName.toLowerCase().startsWith("linux")) {
-            sysName = "linux";
+        String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.startsWith(WINDOWS)) {
+            return WINDOWS;
         }
-        return sysName;
+        return LINUX;
     }
 
     /**
      * 获取JVM 的CPU占用率（%）
      */
     public String getCPURate() {
-        String cpuRate = "";
-        if ("windows".equals(isWindowsOrLinux)) {
-            cpuRate = getCPURateForWindows();
-        } else {
-            cpuRate = getCPURateForLinux();
+        if (WINDOWS.equals(isWindowsOrLinux)) {
+            return getCPURateForWindows();
         }
-        return cpuRate;
+        return getCPURateForLinux();
+
     }
 
     /**
@@ -94,8 +91,8 @@ public class JvmInfo {
      */
     public void getJvmPIDOnLinux() {
         String command = "pidof java";
-        BufferedReader in = null;
-        Process pro = null;
+        BufferedReader in;
+        Process pro;
         try {
             pro = Runtime.getRuntime().exec(new String[]{"sh", "-c", command});
             in = new BufferedReader(new InputStreamReader(pro.getInputStream()));
@@ -111,26 +108,22 @@ public class JvmInfo {
      * 获取JVM的内存占用率（%）
      */
     public String getMemoryRate() {
-        String memRate = "";
-        if ("windows".equals(isWindowsOrLinux)) {
-            memRate = getMemoryRateForWindows();
-        } else {
-            memRate = getMemoryRateForLinux();
+        if (WINDOWS.equals(isWindowsOrLinux)) {
+            return getMemoryRateForWindows();
         }
-        return memRate;
+        return getMemoryRateForLinux();
+
     }
 
     /**
      * 获取JVM 线程数
      */
     public int getThreadCount() {
-        int threadCount = 0;
-        if ("windows".equals(isWindowsOrLinux)) {
-            threadCount = getThreadCountForWindows();
-        } else {
-            threadCount = getThreadCountForLinux();
+        if (WINDOWS.equals(isWindowsOrLinux)) {
+            return getThreadCountForWindows();
         }
-        return threadCount;
+        return getThreadCountForLinux();
+
     }
 
 
@@ -138,13 +131,11 @@ public class JvmInfo {
      * 获取网口吞吐量（MB/s）
      */
     public String getNetworkThroughput() {
-        String throughput;
-        if ("windows".equals(isWindowsOrLinux)) {
-            throughput = getNetworkThroughputForWindows();
-        } else {
-            throughput = getNetworkThroughputForLinux();
+        if (WINDOWS.equals(isWindowsOrLinux)) {
+            return getNetworkThroughputForWindows();
         }
-        return throughput;
+        return getNetworkThroughputForLinux();
+
     }
 
     /**
@@ -157,65 +148,56 @@ public class JvmInfo {
         BufferedReader input;
         String rxPercent = "";
         String txPercent = "";
-        JSONObject jsonObject = new JSONObject();
         try {
             String command = "netstat -e";
             pro1 = r.exec(command);
             input = new BufferedReader(new InputStreamReader(pro1.getInputStream()));
-            String[] result1 = readInLine(input, "windows");
+            String[] result1 = readInLine(input, WINDOWS);
             Thread.sleep(SLEEP_TIME);
             pro2 = r.exec(command);
             input = new BufferedReader(new InputStreamReader(pro2.getInputStream()));
-            String[] result2 = readInLine(input, "windows");
-            rxPercent = formatNumber((Long.parseLong(result2[0]) - Long.parseLong(result1[0]))
-                    / (float) (1024 * 1024 * (SLEEP_TIME / 1000)));
-            txPercent = formatNumber((Long.parseLong(result2[1]) - Long.parseLong(result1[1]))
-                    / (float) (1024 * 1024 * (SLEEP_TIME / 1000)));
+            String[] result2 = readInLine(input, WINDOWS);
+            rxPercent = formatNumber(String.valueOf(Long.parseLong(result2[0]) - Long.parseLong(result1[0])), String.valueOf(1024 * 1024 * (SLEEP_TIME / 1000)));
+            txPercent = formatNumber(String.valueOf(Long.parseLong(result2[1]) - Long.parseLong(result1[1])), String.valueOf(1024 * 1024 * (SLEEP_TIME / 1000)));
             input.close();
             pro1.destroy();
             pro2.destroy();
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        jsonObject.put("rxPercent", rxPercent);
-        jsonObject.put("txPercent", txPercent);
-        return JSON.toJSONString(jsonObject, "yyyy-MM-dd HH:mm:ss", JSONWriter.Feature.WriteNulls);
+        final JSONObject object = JSONObject.of("rxPercent", rxPercent, "txPercent", txPercent);
+        return JSON.toJSONString(object, "yyyy-MM-dd HH:mm:ss", JSONWriter.Feature.WriteNulls);
     }
 
     /**
      * 获取Linux环境下网口的上下行速率
      */
     public String getNetworkThroughputForLinux() {
-        Process pro1 = null;
-        Process pro2 = null;
+        Process pro1;
+        Process pro2;
         Runtime r = Runtime.getRuntime();
-        BufferedReader input = null;
+        BufferedReader input;
         String rxPercent = "";
         String txPercent = "";
-        JSONObject jsonObject = new JSONObject();
         try {
             String command = "watch ifconfig";
             pro1 = r.exec(command);
             input = new BufferedReader(new InputStreamReader(pro1.getInputStream()));
-
-            String[] result1 = readInLine(input, "linux");
+            String[] result1 = readInLine(input, LINUX);
             Thread.sleep(SLEEP_TIME);
             pro2 = r.exec(command);
             input = new BufferedReader(new InputStreamReader(pro2.getInputStream()));
-            String[] result2 = readInLine(input, "linux");
-            rxPercent = formatNumber((Long.parseLong(result2[0]) - Long.parseLong(result1[0]))
-                    / (float) (1024 * 1024 * (SLEEP_TIME / 1000)));
-            txPercent = formatNumber((Long.parseLong(result2[1]) - Long.parseLong(result1[1]))
-                    / (float) (1024 * 1024 * (SLEEP_TIME / 1000)));
+            String[] result2 = readInLine(input, LINUX);
+            txPercent = formatNumber(String.valueOf(Long.parseLong(result2[1]) - Long.parseLong(result1[1])), String.valueOf(1024 * 1024 * (SLEEP_TIME / 1000)));
+            rxPercent = formatNumber(String.valueOf(Long.parseLong(result2[0]) - Long.parseLong(result1[0])), String.valueOf(1024 * 1024 * (SLEEP_TIME / 1000)));
             input.close();
             pro1.destroy();
             pro2.destroy();
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        jsonObject.put("rxPercent", rxPercent);
-        jsonObject.put("txPercent", txPercent);
-        return JSON.toJSONString(jsonObject, "yyyy-MM-dd HH:mm:ss", JSONWriter.Feature.NullAsDefaultValue);
+        final JSONObject object = JSONObject.of("rxPercent", rxPercent, "txPercent", txPercent);
+        return JSON.toJSONString(object, "yyyy-MM-dd HH:mm:ss", JSONWriter.Feature.NullAsDefaultValue);
     }
 
     /**
@@ -230,16 +212,10 @@ public class JvmInfo {
             Thread.sleep(CPUTIME);
             long[] c1 = readCpu(Runtime.getRuntime().exec(procCmd));
             if (c0 != null && c1 != null) {
-                long idletime = c1[0] - c0[0];
-                long busytime = c1[1] - c0[1];
-                long cpuRate = PERCENT * (busytime) / (busytime + idletime);
-                if (cpuRate > 100) {
-                    cpuRate = 100;
-                } else if (cpuRate < 0) {
-                    cpuRate = 0;
-                }
-                return String.valueOf(PERCENT * (busytime) / (busytime + idletime));
+                long idleTime = c1[0] - c0[0];
+                long busyTime = c1[1] - c0[1];
 
+                return String.valueOf(PERCENT * (busyTime) / (busyTime + idleTime));
             } else {
                 return "0.0";
             }
@@ -260,16 +236,13 @@ public class JvmInfo {
         String user;
         String linuxVersion = System.getProperty("os.version");
         try {
-            System.out.println("Linux版本: " + linuxVersion);
-
+            log.info("Linux版本: " + linuxVersion);
             Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "top -b -p " + pid});
-            try {
-                // top命令默认3秒动态更新结果信息，让线程睡眠5秒以便获取最新结果
-                Thread.sleep(CPUTIME);
-                is = process.getInputStream();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+            // top命令默认3秒动态更新结果信息，让线程睡眠5秒以便获取最新结果
+            ThreadUtil.sleep(CPUTIME);
+            is = process.getInputStream();
+
             isr = new InputStreamReader(is);
             brStat = new BufferedReader(isr);
 
@@ -288,7 +261,7 @@ public class JvmInfo {
                 tokenStat.nextToken();
                 String nice = tokenStat.nextToken();
 
-                System.out.println(user + " , " + system + " , " + nice);
+                log.info(user + " , " + system + " , " + nice);
 
                 user = user.substring(0, user.indexOf("%"));
                 system = system.substring(0, system.indexOf("%"));
@@ -319,7 +292,7 @@ public class JvmInfo {
             }
 
         } catch (IOException ioe) {
-            System.out.println(ioe.getMessage());
+            log.info(ioe.getMessage());
             freeResource(is, isr, brStat);
             return "100";
         } finally {
@@ -332,7 +305,7 @@ public class JvmInfo {
      * 获取Linux环境下JVM的内存占用率
      */
     public String getMemoryRateForLinux() {
-        Process pro = null;
+        Process pro;
         Runtime r = Runtime.getRuntime();
         String remCount = "";
         try {
@@ -386,7 +359,7 @@ public class JvmInfo {
             long physicalJvmMem = Long.parseLong(remCount) / 1024;
             OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
             long physicalTotal = osmxb.getTotalPhysicalMemorySize() / (1024 * 1024);
-            result = formatNumber(physicalJvmMem / (float) physicalTotal);
+            result = formatNumber(String.valueOf(physicalJvmMem), String.valueOf(physicalTotal));
             if (Float.parseFloat(result) > 1) {
                 result = "1";
             } else if (Float.parseFloat(result) < 0) {
@@ -419,6 +392,7 @@ public class JvmInfo {
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
+        assert ts != null;
         return ts.nextToken();
     }
 
@@ -453,7 +427,7 @@ public class JvmInfo {
     public int getThreadCountForWindows() {
         String command = "wmic process " + pid + "  list brief";
         int count = 0;
-        BufferedReader in = null;
+        BufferedReader in;
         try {
             Process pro = Runtime.getRuntime().exec(command);
             in = new BufferedReader(new InputStreamReader(pro.getInputStream()));
@@ -503,7 +477,7 @@ public class JvmInfo {
             InputStreamReader ir = new InputStreamReader(proc.getInputStream());
             LineNumberReader input = new LineNumberReader(ir);
             String line = input.readLine();
-            if (line == null || line.length() < FAULTLENGTH) {
+            if (line == null || line.length() < FAULT_LENGTH) {
                 return null;
             }
             int capidx = line.indexOf("Caption");
@@ -527,7 +501,6 @@ public class JvmInfo {
                 if (cmd.contains("javaw.exe")) {
                     continue;
                 }
-                // log.info("line="+line);
                 if ("System Idle Process".equals(caption) || "System".equals(caption)) {
                     idletime += Long.parseLong(this.substring(line, kmtidx, rocidx - 1).trim());
                     idletime += Long.parseLong(this.substring(line, umtidx, wocidx - 1).trim());
@@ -558,9 +531,10 @@ public class JvmInfo {
     public String[] readInLine(BufferedReader input, String osType) {
         String rxResult = "";
         String txResult = "";
-        StringTokenizer tokenStat = null;
+        StringTokenizer tokenStat;
         try {
-            if ("linux".equals(osType)) { // 获取linux环境下的网口上下行速率
+            if (LINUX.equals(osType)) {
+                // 获取linux环境下的网口上下行速率
                 String[] result = input.readLine().split(" ");
                 int j = 0, k = 0;
                 for (int i = 0; i < result.length; i++) {
@@ -579,7 +553,8 @@ public class JvmInfo {
                     }
                 }
 
-            } else { // 获取windows环境下的网口上下行速率
+            } else {
+                // 获取windows环境下的网口上下行速率
                 input.readLine();
                 input.readLine();
                 input.readLine();
@@ -614,52 +589,39 @@ public class JvmInfo {
 
     /**
      * 格式化浮点数(float 和 double)，保留两位小数
+     *
+     * @param arg1 被除数
+     * @param arg2 除数
      */
-    private String formatNumber(Object obj) {
-        String result = "";
-        if ("Float".equals(obj.getClass().getSimpleName())) {
-            result = new Formatter().format("%.2f", (float) obj).toString();
-        } else if ("Double".equals(obj.getClass().getSimpleName())) {
-            result = new Formatter().format("%.2f", (double) obj).toString();
-        }
-        return result;
+    private String formatNumber(String arg1, String arg2) {
+        return new BigDecimal(arg1).divide(new BigDecimal(arg2), 2, RoundingMode.DOWN).toString();
     }
 
-    /**
-     * 测试方法 ：监测java执行相关命令后是否能获取到结果集(注：此方法执行后会中断程序的执行，测试完后请注释掉)
-     */
-    public void testGetInput(BufferedReader in) {
-        int y = 0;
-        try {
-            while ((y = in.read()) != -1) {
-                System.out.print((char) y);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     class SysInfoAcquirerTimerTask extends TimerTask {
 
         @Override
         public void run() {
             try {
-                System.out.println("任务开始：");
                 long startTime = System.currentTimeMillis();
                 int threadCount = getThreadCount();
-                String cpuRate = getCPURate(); // CPU使用率
-                String memoryRate = getMemoryRate(); // 内存占用率
+                String cpuRate = getCPURate();
+                // CPU使用率
+                String memoryRate = getMemoryRate();
+                // 内存占用率
                 JSONObject jsonObj = JSON.parseObject(getNetworkThroughput());
-                String upSpeed = jsonObj.getString("txPercent");// 上行速度
-                String downSpeed = jsonObj.getString("rxPercent"); // 下行速度
-                System.out.println("JVM  PID：" + pid);
-                System.out.println("JVM 线程数：" + threadCount);
-                System.out.println("内存占用率：" + memoryRate + "%");
-                System.out.println("CPU使用率：" + cpuRate + "%");
-                System.out.println("上行速度：" + upSpeed + "MB/s 下行速度：" + downSpeed + "MB/s");
+                String upSpeed = jsonObj.getString("txPercent");
+                // 上行速度
+                String downSpeed = jsonObj.getString("rxPercent");
+                // 下行速度
+                log.info("JVM  PID：" + pid);
+                log.info("JVM 线程数：" + threadCount);
+                log.info("内存占用率：" + memoryRate + "%");
+                log.info("CPU使用率：" + cpuRate + "%");
+                log.info("上行速度：" + upSpeed + "MB/s 下行速度：" + downSpeed + "MB/s");
                 //后续操作为将采集到的数据存放到数据库，可自行设计
                 long endTime = System.currentTimeMillis();
-                System.out.println("任务总耗时：" + (endTime - startTime) / (1000 * 60) + "分钟");
+                log.info("任务总耗时：" + (endTime - startTime) / (1000 * 60) + "分钟");
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error(e.toString());
