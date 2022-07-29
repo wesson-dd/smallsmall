@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.StringJoiner;
@@ -55,5 +56,10 @@ public class SmallController {
     @PutMapping("/put")
     public String put() {
         return LocalDateTimeUtil.now().toString();
+    }
+
+    @PutMapping("/learnMore")
+    public String learnMore() {
+        return LocalDateTimeUtil.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 }
