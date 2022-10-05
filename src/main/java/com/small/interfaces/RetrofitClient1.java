@@ -1,7 +1,7 @@
 package com.small.interfaces;
 
-import com.github.lianjiatech.retrofit.spring.boot.annotation.Intercept;
-import com.github.lianjiatech.retrofit.spring.boot.annotation.RetrofitClient;
+import com.github.lianjiatech.retrofit.spring.boot.core.RetrofitClient;
+import com.github.lianjiatech.retrofit.spring.boot.interceptor.Intercept;
 import com.github.lianjiatech.retrofit.spring.boot.retry.Retry;
 import com.github.lianjiatech.retrofit.spring.boot.retry.RetryRule;
 import com.small.interceptor.MyRetrofitInterceptor;
@@ -16,7 +16,7 @@ import java.util.List;
  * Create at 2022/3/29 11:43 周二
  */
 @Component
-@RetrofitClient(baseUrl = "${remote.base-url}", poolName = "retrofit--")
+@RetrofitClient(baseUrl = "${remote.base-url}")
 @Intercept(handler = MyRetrofitInterceptor.class, include = "/**")
 public interface RetrofitClient1 {
 

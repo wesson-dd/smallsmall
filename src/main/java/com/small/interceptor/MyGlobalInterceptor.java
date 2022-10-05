@@ -1,6 +1,6 @@
 package com.small.interceptor;
 
-import com.github.lianjiatech.retrofit.spring.boot.interceptor.BaseGlobalInterceptor;
+import com.github.lianjiatech.retrofit.spring.boot.interceptor.GlobalInterceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.stereotype.Component;
@@ -14,9 +14,10 @@ import java.io.IOException;
  * Create at 2022/3/29 11:35 周二
  */
 @Component
-public class MyGlobalInterceptor extends BaseGlobalInterceptor {
+public class MyGlobalInterceptor implements GlobalInterceptor {
+
     @Override
-    protected Response doIntercept(Chain chain) throws IOException {
+    public Response intercept(Chain chain) throws IOException {
         Request request = chain.request().newBuilder()
                 .addHeader("myHeader", "retrofit")
                 .build();

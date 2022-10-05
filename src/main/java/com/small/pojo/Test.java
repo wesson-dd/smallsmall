@@ -3,6 +3,7 @@ package com.small.pojo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author wesson
@@ -15,4 +16,7 @@ public class Test implements Serializable {
     private String name;
     private Integer type;
     private Integer id;
+    private Boolean aBoolean = true;
+    private Long aLong;
+    private BigDecimal bigDecimal;
 }
