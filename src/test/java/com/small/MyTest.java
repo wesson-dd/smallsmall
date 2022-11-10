@@ -1,5 +1,8 @@
 package com.small;
 
+import cn.hutool.core.text.csv.CsvUtil;
+import cn.hutool.core.text.csv.CsvWriter;
+import com.google.common.collect.Lists;
 import com.small.util.MyOpenCsv;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -69,11 +73,24 @@ class MyTest {
         com.small.pojo.Test test = new com.small.pojo.Test();
         System.out.println(ClassLayout.parseInstance(test).toPrintable());
 
-        synchronized (test){
+        synchronized (test) {
             System.out.println(ClassLayout.parseInstance(test).toPrintable());
         }
 
         Object obj = new Object();// 16 byte
         System.out.println(ClassLayout.parseInstance(obj).toPrintable());
+    }
+
+    @Test
+    void writeCsvWithBean() {
+        com.small.pojo.Test test = new com.small.pojo.Test();
+        test.setId(2);
+        com.small.pojo.Test test2 = new com.small.pojo.Test();
+        test2.setId(3);
+        List<com.small.pojo.Test> tests = Lists.newArrayList(test2, test);
+
+        CsvWriter writer = CsvUtil.getWriter("aa.csv", Charset.defaultCharset());
+        writer.writeBeans(tests);
+        writer.close();
     }
 }

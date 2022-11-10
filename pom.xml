@@ -59,7 +59,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.8.7</version>
+            <version>5.8.9</version>
         </dependency>
         <dependency>
             <groupId>com.opencsv</groupId>
@@ -108,6 +108,11 @@
             <groupId>org.openjdk.jol</groupId>
             <artifactId>jol-core</artifactId>
             <version>0.16</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-quickstart-java_2.11</artifactId>
+            <version>0.10.2</version>
         </dependency>
     </dependencies>
 
