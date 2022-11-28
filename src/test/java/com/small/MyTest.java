@@ -4,6 +4,8 @@ import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.text.csv.CsvWriter;
 import com.google.common.collect.Lists;
 import com.small.util.MyOpenCsv;
+import com.spire.xls.Workbook;
+import com.spire.xls.Worksheet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jol.info.ClassLayout;
@@ -93,4 +95,20 @@ class MyTest {
         writer.writeBeans(tests);
         writer.close();
     }
+
+    @Test
+    void moveSheet() {
+        //加载文档
+        Workbook wb = new Workbook();
+        wb.loadFromFile("/Users/wesson/Desktop/test.xlsx");
+        //获取工作表
+        Worksheet sheet = wb.getWorksheets().get(1);
+        //移动工作表作为第三张工作表
+        sheet.moveWorksheet(0);
+        //保存文档
+        wb.save();
+        wb.dispose();
+    }
+
+
 }
