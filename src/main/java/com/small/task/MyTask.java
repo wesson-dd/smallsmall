@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class MyTask {
 
-    @Scheduled(initialDelay = 1000, fixedRate = 2000)
+    @Scheduled(initialDelay = 1000, fixedRate = 20000)
     public void task01() {
         log.info("---i am task01---");
     }
 
-    @Async
-    @Scheduled(initialDelay = 1500, fixedRate = 3000)
+    @Async //优先级高
+    @Scheduled(initialDelay = 1500, fixedRate = 30000)
     public void task02() {
         log.info("---i am task02---");
     }
