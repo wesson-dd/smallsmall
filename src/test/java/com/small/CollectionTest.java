@@ -34,7 +34,7 @@ public class CollectionTest {
 
         map2.put("A", Sets.newHashSet("==", "--"));
         mapOrigin.forEach((k, v) -> map2.computeIfPresent(v, (v1, v2) -> {
-            v2.add(v1);
+            v2.add(k);
             return v2;
         }));
 
