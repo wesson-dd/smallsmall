@@ -10,7 +10,7 @@ import java.util.List;
  * @author wesson
  * Create at 2021-07-30 21:07
  */
-public class GuavaUtil {
+public class Point2DUtil {
 
     public static void main(String[] args) {
         final Point2D.Double aDouble = new Point2D.Double(1, 1.588888);
@@ -28,21 +28,21 @@ public class GuavaUtil {
         pts.add(a2);
         pts.add(a3);
         pts.add(a4);
-        final long l = System.currentTimeMillis();
+        final long l = System.nanoTime();
         System.out.println(isInPolygon(aDouble, pts));
-        final long l2 = System.currentTimeMillis();
+        final long l2 = System.nanoTime();
         System.out.println("----" + (l2 - l));
         System.out.println(isInPolygon(aDouble2, pts));
-        final long l3 = System.currentTimeMillis();
+        final long l3 = System.nanoTime();
         System.out.println("----" + (l3 - l2));
         System.out.println(isInPolygon(aDouble3, pts));
-        final long l4 = System.currentTimeMillis();
+        final long l4 = System.nanoTime();
         System.out.println("----" + (l4 - l3));
         System.out.println(isInPolygon(aDouble4, pts));
-        final long l5 = System.currentTimeMillis();
+        final long l5 = System.nanoTime();
         System.out.println("----" + (l5 - l4));
         System.out.println(isInPolygon(aDouble5, pts));
-        final long l6 = System.currentTimeMillis();
+        final long l6 = System.nanoTime();
         System.out.println("----" + (l6 - l5));
     }
 
@@ -56,11 +56,11 @@ public class GuavaUtil {
     public static boolean isInPolygon(Point2D.Double point, List<Point2D.Double> pts) {
 
         int N = pts.size();
-        //交叉点数量
+        // 交叉点数量
         int intersectCount = 0;
-        //浮点类型计算时候与0比较时候的容差
+        // 浮点类型计算时候与0比较时候的容差
         double precision = 2e-10;
-        //临近顶点
+        // 临近顶点
         Point2D.Double p1, p2;
 
         p1 = pts.get(0);
@@ -75,7 +75,7 @@ public class GuavaUtil {
                 continue;
             }
 
-            //射线穿过算法
+            // 射线穿过算法
             if (point.x > Math.min(p1.x, p2.x) && point.x < Math.max(p1.x, p2.x)) {
                 if (point.y <= Math.max(p1.y, p2.y)) {
                     if (p1.x == p2.x && point.y >= Math.min(p1.y, p2.y)) {
