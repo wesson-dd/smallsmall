@@ -1,8 +1,10 @@
 package com.small.controller;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.IdUtil;
 import com.small.mapper.TestMapper;
 import com.small.pojo.Test;
+import com.small.pojo.TestPojo;
 import com.small.service.SmallService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,7 @@ public class SmallController {
     private TestMapper testMapper;
 
     @GetMapping("/get")
-    public List<Test> get(HttpServletRequest request) {
+    public List<TestPojo> get(HttpServletRequest request) {
         Enumeration<String> headerNames = request.getHeaderNames();
         StringJoiner stringJoiner = new StringJoiner(",");
         while (headerNames.hasMoreElements()) {
@@ -36,6 +38,25 @@ public class SmallController {
         }
         log.info("----header:[{}]", stringJoiner);
         return testMapper.getTestInfo();
+    }
+
+
+    @GetMapping("/get2")
+    public void TestPojo() {
+        for (int i = 7; i < 10000; i++) {
+            testMapper.insert(new TestPojo().setName("中文"+ IdUtil.nanoId(5)).setId(i)
+            );
+        }
+    }
+
+    @GetMapping("/get3")
+    public List<TestPojo> get3() {
+        return testMapper.findLike("防守打");
+    }
+
+    @GetMapping("/get4")
+    public List<TestPojo> get4() {
+        return testMapper.findLike2("防守打");
     }
 
     @PostMapping("/post")

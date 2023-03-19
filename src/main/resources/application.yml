@@ -39,6 +39,7 @@ spring:
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.small.pojo
+#  type-handlers-package: com.small.interceptor
 
 wesson:
   to: to

@@ -1,8 +1,9 @@
 package com.small.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.small.pojo.Test;
+import com.small.pojo.TestPojo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,9 +16,12 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface TestMapper extends BaseMapper<Test> {
+public interface TestMapper extends BaseMapper<TestPojo> {
 
-    List<Test> getTestInfo();
+    List<TestPojo> getTestInfo();
+
+    List<TestPojo> findLike(@Param("code") String code);
 
 
+    List<TestPojo> findLike2(@Param("code") String code);
 }
