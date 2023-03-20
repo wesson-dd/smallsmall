@@ -1,5 +1,7 @@
 package com.small.util;
 
+import lombok.var;
+
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,4 +117,40 @@ public class Point2DUtil {
         //奇数在多边形内
         return intersectCount % 2 != 0;
     }
+
+    // 点所在的球体半径，在本例中为地球
+    private static final double SPHERE_RADIUS_IN_KM = 6372.8;
+
+    public static double findHaversineDistance(double latA, double longA, double latB, double longB) {
+        if (!isValidLatitude(latA)
+                || !isValidLatitude(latB)
+                || !isValidLongitude(longA)
+                || !isValidLongitude(longB)) {
+            throw new IllegalArgumentException("ff");
+        }
+
+        // 计算纬度和经度差
+        var latitudeDiff = Math.toRadians(latB - latA);
+        var longitudeDiff = Math.toRadians(longB - longA);
+
+        var latitudeA = Math.toRadians(latA);
+        var latitudeB = Math.toRadians(latB);
+
+        // 根据哈弗辛公式(haversine)计算距离
+        var a = Math.pow(Math.sin(latitudeDiff / 2), 2)
+                + Math.pow(Math.sin(longitudeDiff / 2), 2) * Math.cos(latitudeA) * Math.cos(latitudeB);
+        var c = 2 * Math.asin(Math.sqrt(a));
+        return SPHERE_RADIUS_IN_KM * c;
+    }
+
+    // 检查有效纬度值
+    private static boolean isValidLatitude(double latitude) {
+        return latitude >= -90 && latitude <= 90;
+    }
+
+    // 检查有效的经度值
+    private static boolean isValidLongitude(double longitude) {
+        return longitude >= -180 && longitude <= 180;
+    }
+
 }

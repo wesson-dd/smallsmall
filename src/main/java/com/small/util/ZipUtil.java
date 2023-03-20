@@ -3,6 +3,7 @@ package com.small.util;
 
 import cn.hutool.core.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.Zip64Mode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -10,6 +11,8 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
 import java.io.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 /**
@@ -91,4 +94,88 @@ public class ZipUtil {
         }
         return true;
     }
+
+    /*压缩单个文件为Zip文件*/
+    public static void zipFile(String srcFilename, String zipFilename) throws IOException {
+        var srcFile = new File(srcFilename);
+        try (
+                var fileOut = new FileOutputStream(zipFilename);
+                var zipOut = new ZipOutputStream(fileOut);
+                var fileIn = new FileInputStream(srcFile);
+        ) {
+            var zipEntry = new ZipEntry(srcFile.getName());
+            zipOut.putNextEntry(zipEntry);
+            final var bytes = new byte[1024];
+            int length;
+            while ((length = fileIn.read(bytes)) >= 0) {
+                zipOut.write(bytes, 0, length);
+            }
+        }
+    }
+
+    /*压缩多个文件为Zip文件*/
+    public static void zipFiles(String[] srcFilenames, String zipFilename) throws IOException {
+        try (
+                var fileOut = new FileOutputStream(zipFilename);
+                var zipOut = new ZipOutputStream(fileOut);
+        ) {
+            for (var i = 0; i < srcFilenames.length; i++) {
+                var srcFile = new File(srcFilenames[i]);
+                try (var fileIn = new FileInputStream(srcFile)) {
+                    var zipEntry = new ZipEntry(srcFile.getName());
+                    zipOut.putNextEntry(zipEntry);
+                    final var bytes = new byte[1024];
+                    int length;
+                    while ((length = fileIn.read(bytes)) >= 0) {
+                        zipOut.write(bytes, 0, length);
+                    }
+                }
+            }
+        }
+    }
+
+    /*压缩文件夹为Zip文件*/
+    public static void zipDirectory(String srcDirectoryName, String zipFileName) throws IOException {
+        var srcDirectory = new File(srcDirectoryName);
+        try (
+                var fileOut = new FileOutputStream(zipFileName);
+                var zipOut = new ZipOutputStream(fileOut)
+        ) {
+            zipFile(srcDirectory, srcDirectory.getName(), zipOut);
+        }
+    }
+
+    public static void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut)
+            throws IOException {
+        if (fileToZip.isHidden()) { // 忽略隐藏的文件
+            return;
+        }
+        if (fileToZip.isDirectory()) {
+            if (fileName.endsWith("/")) {
+                zipOut.putNextEntry(new ZipEntry(fileName)); // 稍后压缩
+                zipOut.closeEntry();
+            } else {
+                // 在执行解压缩操作时，显式添加"/"标记以保留结构
+                zipOut.putNextEntry(new ZipEntry(fileName + "/"));
+                zipOut.closeEntry();
+            }
+            var children = fileToZip.listFiles();
+            for (var childFile : children) { // 递归地将函数应用于所有子级
+                zipFile(childFile, fileName + "/" + childFile.getName(), zipOut);
+            }
+            return;
+        }
+        try (
+                var fis = new FileInputStream(fileToZip) // 只能是一个文件，开始压缩
+        ) {
+            var zipEntry = new ZipEntry(fileName);
+            zipOut.putNextEntry(zipEntry);
+            var bytes = new byte[1024];
+            var length = 0;
+            while ((length = fis.read(bytes)) >= 0) {
+                zipOut.write(bytes, 0, length);
+            }
+        }
+    }
+
 }
