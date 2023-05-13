@@ -15,6 +15,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -108,6 +110,20 @@ class MyTest {
         //保存文档
         wb.save();
         wb.dispose();
+    }
+
+    @Test
+    void sort() {
+        final List<com.small.pojo.Test> tests = Lists.newArrayList(new com.small.pojo.Test().setTime(LocalDateTime.now()),
+                new com.small.pojo.Test().setTime(LocalDateTime.now().plusHours(-1)));
+        System.out.println(tests);
+
+        tests.sort(Comparator.comparing(com.small.pojo.Test::getTime));
+
+        System.out.println(tests);
+
+
+
     }
 
 

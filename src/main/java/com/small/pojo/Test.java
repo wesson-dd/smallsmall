@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * @author wesson
@@ -30,4 +31,5 @@ public class Test implements Serializable {
     private Long aLong = 2L;
 
     private BigDecimal bigDecimal = new BigDecimal("0");
+    private LocalDateTime time ;
 }
