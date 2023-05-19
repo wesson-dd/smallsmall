@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.small.mapper.TestJsonMapper">
+
+    <resultMap id="BaseResultMap" type="com.small.pojo.TestJson">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="myJson" column="my_json" jdbcType="VARCHAR"
+                typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,my_json
+    </sql>
+
+    <update id="set">
+        update test_json set my_json = JSON_SET(my_json, '$.jan', #{value})
+        where id = #{id}
+    </update>
+
+    <update id="remove">
+        update test_json set my_json = JSON_REMOVE(my_json, '$.may')
+        where id = #{id}
+    </update>
+
+    <select id="selectListXml" resultMap="BaseResultMap">
+        select id, name, my_json
+        from test_json
+        where my_json->>"$.jan" = '一月哈'
+    </select>
+
+    <select id="selectListXml2" resultMap="BaseResultMap">
+        select id, name, my_json
+        from test_json
+        where my_json->>"$.jan" is not null
+    </select>
+
+
+</mapper>
