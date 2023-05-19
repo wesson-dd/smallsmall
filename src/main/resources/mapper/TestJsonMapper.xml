@@ -16,12 +16,14 @@
     </sql>
 
     <update id="set">
-        update test_json set my_json = JSON_SET(my_json, '$.jan', #{value})
+        update test_json
+        set my_json = JSON_SET(my_json, '$.jan', #{value})
         where id = #{id}
     </update>
 
     <update id="remove">
-        update test_json set my_json = JSON_REMOVE(my_json, '$.may')
+        update test_json
+        set my_json = JSON_REMOVE(my_json, '$.may')
         where id = #{id}
     </update>
 
