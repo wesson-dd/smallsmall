@@ -29,7 +29,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.30</version>
+            <version>8.0.33</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -37,6 +37,7 @@
             <artifactId>lombok</artifactId>
             <version>1.18.24</version>
         </dependency>
+        <!--    jdk8不支持再往上升级了-->
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
@@ -45,7 +46,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.4.1</version>
+            <version>2.15.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -65,12 +66,12 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.8.11</version>
+            <version>5.8.15</version>
         </dependency>
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>5.7.0</version>
+            <version>5.7.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -86,12 +87,12 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.2</version>
+            <version>3.5.3.1</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-            <version>3.5.2</version>
+            <version>3.6.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -106,7 +107,7 @@
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
-            <version>2.0.14.graal</version>
+            <version>2.0.25</version>
             <scope>compile</scope>
         </dependency>
         <!--查看对象的信息-->
