@@ -66,7 +66,7 @@ retrofit:
     # 日志打印拦截器
     logging-interceptor: com.github.lianjiatech.retrofit.spring.boot.interceptor.DefaultLoggingInterceptor
     # 全局日志打印级别
-    global-log-level: info
+    global-log-level: debug
     # 全局日志打印策略
     global-log-strategy: basic
 

@@ -11,11 +11,27 @@
     <select id="findLike" resultType="com.small.pojo.TestPojo">
         select *
         from test
-        where name  like concat('%',#{code},'%')
+        where name like concat('%', #{code}, '%')
     </select>
     <select id="findLike2" resultType="com.small.pojo.TestPojo">
-        SELECT * FROM test WHERE MATCH (name) AGAINST (#{code});
+        SELECT *
+        FROM test
+        WHERE MATCH(name) AGAINST (#{code});
 
+    </select>
+
+    <select id="getByForeach" resultType="com.small.pojo.TestPojo">
+        select id ,name from (
+        <foreach collection="list" item="item" index="index" separator="union">
+            select id, name from test where
+            find_in_set(#{item},name) >0
+        </foreach>
+        union
+        <foreach collection="list2" item="item" index="index" separator="union">
+            select id, name from test where
+            find_in_set(#{item},name) >0
+        </foreach>
+        ) t
     </select>
 
 </mapper>

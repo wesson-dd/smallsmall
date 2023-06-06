@@ -24,4 +24,6 @@ public interface TestMapper extends BaseMapper<TestPojo> {
 
 
     List<TestPojo> findLike2(@Param("code") String code);
+
+    List<TestPojo> getByForeach(@Param("list") List<String> list, @Param("list2") List<String> list2);
 }
