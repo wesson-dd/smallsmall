@@ -30,6 +30,8 @@ public class Test implements Serializable {
     @Alias("天")
     private Long aLong = 2L;
 
+    private Double aDouble = 2D;
+
     private BigDecimal bigDecimal = new BigDecimal("0");
-    private LocalDateTime time ;
+    private LocalDateTime time;
 }
