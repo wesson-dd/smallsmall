@@ -22,15 +22,23 @@
 
     <select id="getByForeach" resultType="com.small.pojo.TestPojo">
         select id ,name from (
-        <foreach collection="list" item="item" index="index" separator="union">
-            select id, name from test where
-            find_in_set(#{item},name) >0
-        </foreach>
-        union
-        <foreach collection="list2" item="item" index="index" separator="union">
-            select id, name from test where
-            find_in_set(#{item},name) >0
-        </foreach>
+        <choose>
+            <when test="list.size > 5">
+                <foreach collection="list" item="item" index="index" separator="union">
+                    select id, name from test where
+                    find_in_set(#{item},name) >0
+                </foreach>
+                union
+                <foreach collection="list2" item="item" index="index" separator="union">
+                    select id, name from test where
+                    find_in_set(#{item},name) >0
+                </foreach>
+            </when>
+            <otherwise>
+                select id, name from test where
+                id > 11110
+            </otherwise>
+        </choose>
         ) t
     </select>
 

@@ -2,7 +2,11 @@ package com.small;
 
 import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.text.csv.CsvWriter;
+import com.alibaba.fastjson2.JSON;
 import com.google.common.collect.Lists;
+import com.small.mapstruct.Car;
+import com.small.mapstruct.CarDto;
+import com.small.mapstruct.CarMapper;
 import com.small.util.MyOpenCsv;
 import com.spire.xls.Workbook;
 import com.spire.xls.Worksheet;
@@ -14,6 +18,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -122,6 +127,21 @@ class MyTest {
 
         System.out.println(tests);
 
+
+    }
+
+    @Test
+    void mapStruct() {
+        final Car car = new Car();
+        car.setId(null);
+        car.setStr(null);
+        car.setBigDecimal(new BigDecimal("1.23"));
+        car.setTime(LocalDateTime.now());
+
+
+        final CarDto carDto = CarMapper.INSTANCE.carToCarDto(car);
+
+        System.out.println(JSON.toJSONString(carDto));
 
 
     }

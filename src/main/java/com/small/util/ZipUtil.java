@@ -3,7 +3,6 @@ package com.small.util;
 
 import cn.hutool.core.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.Zip64Mode;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -97,15 +96,15 @@ public class ZipUtil {
 
     /*压缩单个文件为Zip文件*/
     public static void zipFile(String srcFilename, String zipFilename) throws IOException {
-        var srcFile = new File(srcFilename);
+        File srcFile = new File(srcFilename);
         try (
-                var fileOut = new FileOutputStream(zipFilename);
-                var zipOut = new ZipOutputStream(fileOut);
-                var fileIn = new FileInputStream(srcFile);
+                FileOutputStream fileOut = new FileOutputStream(zipFilename);
+                ZipOutputStream zipOut = new ZipOutputStream(fileOut);
+                FileInputStream fileIn = new FileInputStream(srcFile)
         ) {
-            var zipEntry = new ZipEntry(srcFile.getName());
+            ZipEntry zipEntry = new ZipEntry(srcFile.getName());
             zipOut.putNextEntry(zipEntry);
-            final var bytes = new byte[1024];
+            final byte[] bytes = new byte[1024];
             int length;
             while ((length = fileIn.read(bytes)) >= 0) {
                 zipOut.write(bytes, 0, length);
@@ -116,15 +115,15 @@ public class ZipUtil {
     /*压缩多个文件为Zip文件*/
     public static void zipFiles(String[] srcFilenames, String zipFilename) throws IOException {
         try (
-                var fileOut = new FileOutputStream(zipFilename);
-                var zipOut = new ZipOutputStream(fileOut);
+                FileOutputStream fileOut = new FileOutputStream(zipFilename);
+                ZipOutputStream zipOut = new ZipOutputStream(fileOut)
         ) {
-            for (var i = 0; i < srcFilenames.length; i++) {
-                var srcFile = new File(srcFilenames[i]);
-                try (var fileIn = new FileInputStream(srcFile)) {
-                    var zipEntry = new ZipEntry(srcFile.getName());
+            for (int i = 0; i < srcFilenames.length; i++) {
+                File srcFile = new File(srcFilenames[i]);
+                try (FileInputStream fileIn = new FileInputStream(srcFile)) {
+                    ZipEntry zipEntry = new ZipEntry(srcFile.getName());
                     zipOut.putNextEntry(zipEntry);
-                    final var bytes = new byte[1024];
+                    final byte[] bytes = new byte[1024];
                     int length;
                     while ((length = fileIn.read(bytes)) >= 0) {
                         zipOut.write(bytes, 0, length);
@@ -136,10 +135,10 @@ public class ZipUtil {
 
     /*压缩文件夹为Zip文件*/
     public static void zipDirectory(String srcDirectoryName, String zipFileName) throws IOException {
-        var srcDirectory = new File(srcDirectoryName);
+        File srcDirectory = new File(srcDirectoryName);
         try (
-                var fileOut = new FileOutputStream(zipFileName);
-                var zipOut = new ZipOutputStream(fileOut)
+                FileOutputStream fileOut = new FileOutputStream(zipFileName);
+                ZipOutputStream zipOut = new ZipOutputStream(fileOut)
         ) {
             zipFile(srcDirectory, srcDirectory.getName(), zipOut);
         }
@@ -159,19 +158,19 @@ public class ZipUtil {
                 zipOut.putNextEntry(new ZipEntry(fileName + "/"));
                 zipOut.closeEntry();
             }
-            var children = fileToZip.listFiles();
-            for (var childFile : children) { // 递归地将函数应用于所有子级
+            File[] children = fileToZip.listFiles();
+            for (File childFile : children) { // 递归地将函数应用于所有子级
                 zipFile(childFile, fileName + "/" + childFile.getName(), zipOut);
             }
             return;
         }
         try (
-                var fis = new FileInputStream(fileToZip) // 只能是一个文件，开始压缩
+                FileInputStream fis = new FileInputStream(fileToZip) // 只能是一个文件，开始压缩
         ) {
-            var zipEntry = new ZipEntry(fileName);
+            ZipEntry zipEntry = new ZipEntry(fileName);
             zipOut.putNextEntry(zipEntry);
-            var bytes = new byte[1024];
-            var length = 0;
+            byte[] bytes = new byte[1024];
+            int length = 0;
             while ((length = fis.read(bytes)) >= 0) {
                 zipOut.write(bytes, 0, length);
             }

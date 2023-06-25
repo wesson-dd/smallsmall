@@ -1,6 +1,5 @@
 package com.small.util;
 
-import lombok.var;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -130,16 +129,16 @@ public class Point2DUtil {
         }
 
         // 计算纬度和经度差
-        var latitudeDiff = Math.toRadians(latB - latA);
-        var longitudeDiff = Math.toRadians(longB - longA);
+        double latitudeDiff = Math.toRadians(latB - latA);
+        double longitudeDiff = Math.toRadians(longB - longA);
 
-        var latitudeA = Math.toRadians(latA);
-        var latitudeB = Math.toRadians(latB);
+        double latitudeA = Math.toRadians(latA);
+        double latitudeB = Math.toRadians(latB);
 
         // 根据哈弗辛公式(haversine)计算距离
-        var a = Math.pow(Math.sin(latitudeDiff / 2), 2)
+        double a = Math.pow(Math.sin(latitudeDiff / 2), 2)
                 + Math.pow(Math.sin(longitudeDiff / 2), 2) * Math.cos(latitudeA) * Math.cos(latitudeB);
-        var c = 2 * Math.asin(Math.sqrt(a));
+        double c = 2 * Math.asin(Math.sqrt(a));
         return SPHERE_RADIUS_IN_KM * c;
     }
 
