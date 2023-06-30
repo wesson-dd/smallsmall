@@ -1,7 +1,10 @@
 package com.small;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.text.csv.CsvUtil;
 import cn.hutool.core.text.csv.CsvWriter;
+import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson2.JSON;
 import com.google.common.collect.Lists;
 import com.small.mapstruct.Car;
@@ -22,6 +25,7 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -144,6 +148,18 @@ class MyTest {
         System.out.println(JSON.toJSONString(carDto));
 
 
+    }
+
+    @Test
+    void csv2() {
+        final CsvWriter writer = CsvUtil.getWriter("./wesson.csv", Charset.defaultCharset(), true);
+
+        for (int i = 0; i < 10000; i++) {
+            String tet = DateUtil.format(new Date(), DatePattern.NORM_DATETIME_MS_PATTERN) + ": " + IdUtil.fastSimpleUUID();
+            writer.writeLine(tet);
+        }
+
+        writer.close();
     }
 
 
