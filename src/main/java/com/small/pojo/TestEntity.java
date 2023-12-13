@@ -1,8 +1,7 @@
 package com.small.pojo;
 
 import cn.hutool.core.annotation.Alias;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -14,9 +13,12 @@ import java.time.LocalDateTime;
  * Create at 2022/3/24 10:48 周四
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Accessors(chain = true)
 @EqualsAndHashCode
-public class Test implements Serializable {
+public class TestEntity implements Serializable {
 
     private static final long serialVersionUID = -4725420540624500836L;
     @Alias("我")

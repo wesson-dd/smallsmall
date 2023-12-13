@@ -2,7 +2,7 @@ package com.small.util;
 
 import cn.hutool.core.lang.Console;
 import com.google.common.collect.Lists;
-import com.small.pojo.Test;
+import com.small.pojo.TestEntity;
 import one.util.streamex.StreamEx;
 
 import java.util.List;
@@ -14,19 +14,19 @@ import java.util.stream.Collectors;
  */
 public class StreamExDemo {
     public static void main(String[] args) {
-        List<Test> one = StreamEx.of(new Test().setName("A-"),
-                new Test().setName("B-")).toList();
+        List<TestEntity> one = StreamEx.of(new TestEntity().setName("A-"),
+                new TestEntity().setName("B-")).toList();
         Console.log(one);
 
-        List<Test> objects = Lists.newArrayList();
+        List<TestEntity> objects = Lists.newArrayList();
         objects.addAll(one);
         Console.log(objects);
 
-        List<Test> collect = one.stream().map(w -> {
+        List<TestEntity> collect = one.stream().map(w -> {
 
-            final Test test = new Test();
-            test.setName(w.getName().replace("-", ""));
-            return test;
+            final TestEntity testEntity = new TestEntity();
+            testEntity.setName(w.getName().replace("-", ""));
+            return testEntity;
         }).collect(Collectors.toList());
 
         Console.log(one);

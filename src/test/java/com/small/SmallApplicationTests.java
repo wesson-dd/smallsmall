@@ -1,6 +1,7 @@
 package com.small;
 
 import com.small.interfaces.RetrofitClient1;
+import com.small.pojo.TestEntity;
 import com.small.service.SmallService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ class SmallApplicationTests {
     @Test
     void retrofitTest1() {
 
-        List<com.small.pojo.Test> retrofitGet = retrofitClient1.retrofitGet();
+        List<TestEntity> retrofitGet = retrofitClient1.retrofitGet();
         Assertions.assertNotNull(retrofitGet);
     }
 }

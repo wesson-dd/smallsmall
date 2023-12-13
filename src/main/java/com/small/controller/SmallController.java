@@ -6,7 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.small.mapper.TestMapper;
-import com.small.pojo.Test;
+import com.small.pojo.TestEntity;
 import com.small.pojo.TestPojo;
 import com.small.service.SmallService;
 import lombok.extern.slf4j.Slf4j;
@@ -81,8 +81,8 @@ public class SmallController {
     }
 
     @PostMapping("/post")
-    public String post(@RequestBody Test test) {
-        return LocalDateTimeUtil.now().toString() + test;
+    public String post(@RequestBody TestEntity testEntity) {
+        return LocalDateTimeUtil.now().toString() + testEntity;
     }
 
     @DeleteMapping("/delete")

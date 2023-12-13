@@ -5,7 +5,7 @@ import com.github.lianjiatech.retrofit.spring.boot.interceptor.Intercept;
 import com.github.lianjiatech.retrofit.spring.boot.retry.Retry;
 import com.github.lianjiatech.retrofit.spring.boot.retry.RetryRule;
 import com.small.interceptor.MyRetrofitInterceptor;
-import com.small.pojo.Test;
+import com.small.pojo.TestEntity;
 import org.springframework.stereotype.Component;
 import retrofit2.http.GET;
 
@@ -22,5 +22,5 @@ public interface RetrofitClient1 {
 
     @GET("small/get")
     @Retry(maxRetries = 3, retryRules = {RetryRule.RESPONSE_STATUS_NOT_2XX, RetryRule.OCCUR_EXCEPTION})
-    List<Test> retrofitGet();
+    List<TestEntity> retrofitGet();
 }
