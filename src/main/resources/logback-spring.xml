@@ -83,7 +83,7 @@
         </root>
     </springProfile>
     <springProfile name="dev">
-        <root level="debug">
+        <root level="info">
             <!-- 生产环境必需关闭 CONSOLE -->
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="ERROR-ASYNC-APPENDER"/>

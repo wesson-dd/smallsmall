@@ -4,18 +4,18 @@
 
     <select id="getTestInfo" resultType="com.small.pojo.TestPojo">
         select *
-        from testEntity
+        from test
         where id &lt;&gt; 9
     </select>
 
     <select id="findLike" resultType="com.small.pojo.TestPojo">
         select *
-        from testEntity
+        from test
         where name like concat('%', #{code}, '%')
     </select>
     <select id="findLike2" resultType="com.small.pojo.TestPojo">
         SELECT *
-        FROM testEntity
+        FROM test
         WHERE MATCH(name) AGAINST (#{code});
 
     </select>
@@ -23,7 +23,7 @@
     <select id="getByForeach" resultType="com.small.pojo.TestPojo">
         select id ,name from (
         <choose>
-            <when testEntity="list.size > 5">
+            <when test="list.size > 5">
                 <foreach collection="list" item="item" index="index" separator="union">
                     select id, name from testEntity where
                     find_in_set(#{item},name) >0
