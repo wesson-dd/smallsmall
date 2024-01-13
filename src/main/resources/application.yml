@@ -9,6 +9,19 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  task:
+    scheduling:
+      pool:
+        size: 10
+    execution:
+      pool:
+        core-size: 10
+        max-size: 20
+        queue-capacity: 50
+      shutdown:
+        await-termination: true
+        await-termination-period: 20
+      thread-name-prefix: a-s-y-c
 
   #数据库
   datasource:
@@ -98,5 +111,3 @@ retrofit:
 # 外部接口地址
 remote:
   base-url: http://127.0.0.1:8080
-
-

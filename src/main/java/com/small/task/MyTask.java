@@ -2,6 +2,7 @@ package com.small.task;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,7 +19,7 @@ public class MyTask {
     }
 
     @Async //优先级高
-    //@Scheduled(initialDelay = 1500, fixedRate = 30000)
+    @Scheduled(initialDelay = 1500, fixedRate = 30000)
     public void task02() {
         log.info("---i am task02---");
     }
