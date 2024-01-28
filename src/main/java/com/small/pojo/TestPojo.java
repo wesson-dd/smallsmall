@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author wesson
@@ -21,4 +22,6 @@ public class TestPojo implements Serializable {
     @TableId( type = IdType.AUTO )
     private Integer id;
     private String name;
+    private Date createTm;
+    private Date updateTm;
 }
