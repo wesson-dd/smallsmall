@@ -118,8 +118,8 @@ public class ZipUtil {
                 FileOutputStream fileOut = new FileOutputStream(zipFilename);
                 ZipOutputStream zipOut = new ZipOutputStream(fileOut)
         ) {
-            for (int i = 0; i < srcFilenames.length; i++) {
-                File srcFile = new File(srcFilenames[i]);
+            for (String srcFilename : srcFilenames) {
+                File srcFile = new File(srcFilename);
                 try (FileInputStream fileIn = new FileInputStream(srcFile)) {
                     ZipEntry zipEntry = new ZipEntry(srcFile.getName());
                     zipOut.putNextEntry(zipEntry);

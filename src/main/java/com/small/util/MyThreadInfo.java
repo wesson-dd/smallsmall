@@ -18,7 +18,7 @@ public class MyThreadInfo extends AbstractTableModel {
     private final String[] columnName;
     private final Class[] columnClass;
     // self-running object control variables
-    private Thread internalThread;
+    private final Thread internalThread;
     private volatile boolean noStopRequested;
 
     public MyThreadInfo() {
@@ -39,15 +39,12 @@ public class MyThreadInfo extends AbstractTableModel {
         // used to control concurrent access
         dataLock = new Object();
         noStopRequested = true;
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    runWork();
-                } catch (Exception x) {
-                    // in case ANY exception slips through
-                    x.printStackTrace();
-                }
+        Runnable r = () -> {
+            try {
+                runWork();
+            } catch (Exception x) {
+                // in case ANY exception slips through
+                x.printStackTrace();
             }
         };
         internalThread = new Thread(r, "ThreadViewer");
@@ -59,14 +56,11 @@ public class MyThreadInfo extends AbstractTableModel {
     private void runWork() {
         // The run() method of transferPending is called by
         // the event handling thread for safe concurrency.
-        Runnable transferPending = new Runnable() {
-            @Override
-            public void run() {
-                transferPendingCellData();
-                // Method of AbstractTableModel that
-                // causes the table to be updated.
-                fireTableDataChanged();
-            }
+        Runnable transferPending = () -> {
+            transferPendingCellData();
+            // Method of AbstractTableModel that
+            // causes the table to be updated.
+            fireTableDataChanged();
         };
         while (noStopRequested) {
             try {
