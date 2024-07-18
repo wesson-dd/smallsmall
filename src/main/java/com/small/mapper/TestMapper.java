@@ -1,12 +1,15 @@
 package com.small.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.small.pojo.NameDto;
 import com.small.pojo.TestPojo;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -19,6 +22,9 @@ import java.util.List;
 public interface TestMapper extends BaseMapper<TestPojo> {
 
     List<TestPojo> getTestInfo();
+
+    @MapKey("id_na")
+    Map<String, NameDto> getMap();
 
     List<TestPojo> findLike(@Param("code") String code);
 

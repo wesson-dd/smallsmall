@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.small.interfaces.RetrofitClient1;
 import com.small.mapper.TestMapper;
+import com.small.pojo.NameDto;
 import com.small.pojo.TestEntity;
 import com.small.pojo.TestPojo;
 import com.small.service.SmallService;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 class SmallApplicationTests {
@@ -42,5 +44,16 @@ class SmallApplicationTests {
         wrapper.eq(TestPojo::getId, 67)
                 .set(TestPojo::getName, "会不会跟新呢2");
         testMapper.update(null, wrapper);
+    }
+
+    @Test
+    void getMap() {
+
+        Map<String, NameDto> map = testMapper.getMap();
+        System.out.println(map);
+        NameDto qw = map.get("qw");
+        System.out.println(qw);
+
+        System.out.println(qw.getName());
     }
 }

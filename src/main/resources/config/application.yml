@@ -1,5 +1,5 @@
 server:
-  port: 7777
+  port: 8888
 # 应用名称
 spring:
   application:
@@ -52,8 +52,7 @@ spring:
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
   type-aliases-package: com.small.pojo
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  type-handlers-package: com.small.interceptor
 
 wesson:
   to: to
@@ -112,3 +111,6 @@ retrofit:
 # 外部接口地址
 remote:
   base-url: http://127.0.0.1:8080
+logging:
+  level:
+    root: info

@@ -22,6 +22,7 @@ public class TestPojo implements Serializable {
     @TableId( type = IdType.AUTO )
     private Integer id;
     private String name;
+    private String idNa;
     private Date createTm;
     private Date updateTm;
 }

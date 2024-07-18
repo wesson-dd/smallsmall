@@ -8,6 +8,12 @@
         where id &lt;&gt; 9
     </select>
 
+    <select id="getMap" resultType="java.util.Map">
+        select name, id_na
+        from test
+        where id &lt; 70
+    </select>
+
     <select id="findLike" resultType="com.small.pojo.TestPojo">
         select *
         from test
