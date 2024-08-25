@@ -2,6 +2,8 @@ package com.small.leetcode;
 
 import org.springframework.util.StopWatch;
 
+import java.util.Arrays;
+
 /**
  * 动态规划
  *
@@ -119,5 +121,97 @@ public class DynamicProgramming {
         return (n - 1) * errorNum(n - 2) + (n - 1) * errorNum(n - 1);
     }
 
+    /**
+     * 给你一个非负整数数组 nums ，你最初位于数组的 第一个下标 。数组中的每个元素代表你在该位置可以跳跃的最大长度。
+     * <p>
+     * 判断你是否能够到达最后一个下标，如果可以，返回 true ；否则，返回 false 。
+     */
+    public boolean canJump(int[] nums) {
+        int size = nums.length;
+        if (size == 1) {
+            return true;
+        }
+        int cover = 0;
+
+        for (int i = 0; i < size; i++) {
+            if (i <= cover) {
+                cover = Math.max(cover, i + nums[i]);
+                if (cover >= size - 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+
+    public String longestCommonPrefix(String[] strs) {
+        StringBuilder s1 = new StringBuilder();
+        for (int i = 0; i < 200; i++) {
+            char tmp = 0;
+            for (int j = 0; j < strs.length; j++) {
+                String str = strs[i];
+                if (str.length() - 1 < i) {
+                    return s1.toString();
+                }
+                if (j == 0) {
+                    tmp = str.charAt(i);
+                } else {
+                    char charred = str.charAt(i);
+                    if (charred != tmp) {
+                        return s1.toString();
+                    }
+                }
+            }
+            s1.append(tmp);
+        }
+        return s1.toString();
+    }
+
+    /**
+     * 给定一个整数数组  nums 和一个正整数 k，找出是否有可能把这个数组分成 k 个非空子集，其总和都相等。
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        int length = nums.length;
+        int[] numUsed = new int[length];
+        Arrays.sort(nums);
+        int sum = Arrays.stream(nums).sum();
+        if (sum % k != 0) {
+            return false;
+        }
+        int avg = sum / k;
+        if (nums[length - 1] > avg) {
+            return false;
+        }
+
+        return doSubGroup(nums, length - 1, avg, 0, k, numUsed);
+    }
+
+    private boolean doSubGroup(int[] nums, int start, int avg, int current, int k, int[] numUsed) {
+        if (k == 1) {
+            return true;
+        }
+        if (current == avg) {
+            return doSubGroup(nums, start - 1, avg, 0, k - 1, numUsed);
+        }
+        for (int i = start; i > 0; i++) {
+            if (numUsed[i] == 1 || current + nums[i] > avg) {
+                continue;
+            }
+            numUsed[i] = 1;
+            if (doSubGroup(nums, i - 1, avg, nums[i] + current, k, numUsed)) {
+                return true;
+            }
+            numUsed[i] = 0;
+            while (i > 0 && nums[i] == nums[i - 1]) {
+                i--;
+            }
+        }
+        return false;
+    }
 
 }
