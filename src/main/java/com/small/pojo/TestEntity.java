@@ -3,10 +3,13 @@ package com.small.pojo;
 import cn.hutool.core.annotation.Alias;
 import lombok.*;
 import lombok.experimental.Accessors;
+import org.apache.commons.compress.utils.Lists;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * @author wesson
@@ -36,4 +39,18 @@ public class TestEntity implements Serializable {
 
     private BigDecimal bigDecimal = new BigDecimal("0");
     private LocalDateTime time;
+
+    public static void main(String[] args) {
+        ArrayList<TestEntity> objects = Lists.newArrayList();
+        TestEntity testEntity1 = new TestEntity();
+        testEntity1.setADouble(1D);
+        TestEntity testEntity2 = new TestEntity();
+        testEntity2.setADouble(2D);
+
+        objects.add(testEntity1);
+        objects.add(testEntity2);
+
+        System.out.println(objects.stream().map(TestEntity::getADouble).max(Comparator.comparingDouble(Double::doubleValue)).orElse(3D));
+
+    }
 }
